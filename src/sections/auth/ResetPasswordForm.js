@@ -5,6 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { LoadingButton } from '@mui/lab';
 import { Stack, TextField } from '@mui/material';
+import { useFirebase } from '../../hooks';
 
 // ----------------------------------------------------------------------
 
@@ -17,14 +18,18 @@ ResetPasswordForm.propTypes = {
   onSent: PropTypes.func,
 };
 
-export default function ResetPasswordForm({ onSent, onGetEmail }) {
+export default function ResetPasswordForm({ setSent, setEmail }) {
+
+
+  const {sendResetPasswordLink} = useFirebase()
+
   const {
     reset,
     control,
     handleSubmit,
     formState: { isSubmitting },
   } = useForm({
-    mode: 'onTouched',
+    mode: 'submit',
     resolver: yupResolver(FormSchema),
     defaultValues: {
       email: '',
@@ -32,10 +37,12 @@ export default function ResetPasswordForm({ onSent, onGetEmail }) {
   });
 
   const onSubmit = async (data) => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    onSent();
-    onGetEmail(data.email);
-    reset();
+    const res = await sendResetPasswordLink(data.email)
+    if (res.success) {
+      setSent(true)
+      setEmail(prev => data.email)
+      reset();
+    }
   };
 
   return (
@@ -48,6 +55,8 @@ export default function ResetPasswordForm({ onSent, onGetEmail }) {
             <TextField
               {...field}
               fullWidth
+              variant= 'outlined'
+              size= 'large'
               label="Email address"
               error={Boolean(error)}
               helperText={error?.message}

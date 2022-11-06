@@ -64,7 +64,7 @@ function SettingsProvider({ children }) {
   const {enqueueSnackbar} = useSnackbar()
   const setAlert = (message, type) => (
     enqueueSnackbar(
-      message, { variant: type == 'error' ? 'error' : '' }
+      message, { variant: type == 'error' ? 'error' : 'info' }
       )
   )
   // -------------USER---------------------

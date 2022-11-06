@@ -3,7 +3,7 @@ import { useState } from 'react';
 import NextLink from 'next/link';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Typography, Stack, Avatar } from '@mui/material';
 // routes
 import Routes from '../../src/routes';
 // layouts
@@ -28,32 +28,47 @@ const RootStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function ResetPasswordPage() {
-  const [email, setEmail] = useState('');
+
   const [sent, setSent] = useState(false);
+  const [email, setEmail] = useState('')
 
   return (
     <Page title="Reset Password">
       <RootStyle>
-        <Box sx={{ maxWidth: 480 }}>
+        <Box sx={{ maxWidth: 450 }}>
           {!sent ? (
             <>
-              <Image
-                alt="reset password"
-                src="https://zone-assets-api.vercel.app/assets/icons/ic_lock_password.svg"
-                sx={{ mb: 5, width: 96, height: 96, mx: 'auto' }}
-              />
+              <Stack
+                sx={{ pb: 7}}
+                justifyContent= 'center'
+                alignItems='center'
+                direction= 'row'
+              >
+            
+                <NextLink href='/' passHref>
+                  <Avatar
+                    src= '/logo.png'
+                    alt= 'Logo-Image'
+                    sx= {{width: 60, height: 'auto', cursor: 'pointer'}}
+                    objectFit='contain'
+                    variant='rounded'
+                  />
+                </NextLink>
+
+            
+          </Stack>
 
               <Typography variant="h3" paragraph>
                 Forgot Your Password?
               </Typography>
               <Typography variant="body2" sx={{ color: 'text.secondary', mb: 5 }}>
-                Please enter the email address associated with your account and We will email you a
+                Enter the email address associated with your account and We will email you a
                 link to reset your password.
               </Typography>
 
               <ResetPasswordForm
-                onSent={() => setSent(true)}
-                onGetEmail={(value) => setEmail(value)}
+                setSent= {setSent}
+                setEmail= {setEmail}
               />
             </>
           ) : (
@@ -73,7 +88,7 @@ export default function ResetPasswordPage() {
                 Request Sent Successfully
               </Typography>
               <Typography>
-                We have sent a confirmation email to {''}
+                A password reset Link has been sent to: {''}
                 <strong>{email}</strong>
                 <br />
                 Please check your email.

@@ -1,22 +1,20 @@
+import React from 'react'
 import PropTypes from 'prop-types';
 // next
 import NextLink from 'next/link';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Box, Stack, Button, AppBar, Divider, Container, Link } from '@mui/material';
+import { Box, Stack, Button, Divider, Container } from '@mui/material';
 // hooks
 import { useOffSetTop, useResponsive } from '../../hooks';
 // routes
 import Routes from '../../routes';
 // config
 import { HEADER_DESKTOP_HEIGHT } from '../../config';
-// components
-import { Logo, Label } from '../../components';
-//
 import Searchbar from '../Searchbar';
 import LanguagePopover from '../LanguagePopover';
 import { NavMobile, NavDesktop, navConfig } from '../nav';
-import { ToolbarStyle, ToolbarShadowStyle } from './HeaderToolbarStyle';
+import { ToolbarStyle } from './HeaderToolbarStyle';
 
 // ----------------------------------------------------------------------
 
@@ -24,7 +22,7 @@ Header.propTypes = {
   transparent: PropTypes.bool,
 };
 
-export default function Header({ transparent }) {
+export default function Header({ transparent, ...others }) {
   const theme = useTheme();
 
   const isDesktop = useResponsive('up', 'md');
@@ -34,44 +32,23 @@ export default function Header({ transparent }) {
   const isScrolling = useOffSetTop(HEADER_DESKTOP_HEIGHT);
 
   return (
-    <AppBar sx={{ boxShadow: 0, bgcolor: 'transparent' }}>
       <ToolbarStyle disableGutters transparent={transparent} scrolling={isScrolling}>
         <Container
+          maxWidth= {false}
           sx={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'flex-start',
           }}
         >
-          <Box sx={{ lineHeight: 0, position: 'relative' }}>
-            <Logo onDark={transparent && !isScrolling} />
 
-            <Link href="https://zone-docs.vercel.app/changelog" target="_blank" rel="noopener">
-              <Label
-                color="info"
-                sx={{
-                  ml: 0.5,
-                  px: 0.5,
-                  top: -14,
-                  left: 64,
-                  height: 20,
-                  fontSize: 11,
-                  cursor: 'pointer',
-                  position: 'absolute',
-                }}
-              >
-                v1.4
-              </Label>
-            </Link>
-          </Box>
-
-          {isDesktop && (
+          {/* {isDesktop && (
             <NavDesktop
               isScrolling={isScrolling}
               isTransparent={transparent}
               navConfig={navConfig}
             />
-          )}
+          )} */}
 
           <Box sx={{ flexGrow: 1 }} />
 
@@ -92,24 +69,14 @@ export default function Header({ transparent }) {
 
             {isDesktop && (
               <Stack direction="row" spacing={1}>
-                <NextLink href={Routes.registerIllustration} prefetch={false} passHref>
+                <NextLink href={Routes.login} prefetch={false} passHref>
                   <Button
                     color="inherit"
-                    variant="outlined"
-                    sx={{
-                      ...(transparent && {
-                        color: 'common.white',
-                      }),
-                      ...(isScrolling && isLight && { color: 'text.primary' }),
-                    }}
+                    variant="contained"
                   >
-                    Join Us
+                    Login
                   </Button>
                 </NextLink>
-
-                <Button variant="contained" href={Routes.buyNow} target="_blank" rel="noopener">
-                  Buy Now
-                </Button>
               </Stack>
             )}
           </Stack>
@@ -126,7 +93,5 @@ export default function Header({ transparent }) {
         </Container>
       </ToolbarStyle>
 
-      {isScrolling && <ToolbarShadowStyle />}
-    </AppBar>
   );
 }

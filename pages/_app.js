@@ -25,8 +25,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { SettingsProvider } from '../src/contexts/SettingsContext';
 // theme
 import ThemeProvider from '../src/theme';
-// utils
-import axios from '../src/utils/axios';
 // components
 import RtlLayout from '../src/components/RtlLayout';
 import ProgressBar from '../src/components/ProgressBar';
@@ -43,20 +41,25 @@ MyApp.propTypes = {
 };
 
 export default function MyApp(props) {
+
   const { Component, pageProps } = props;
 
   const getLayout = Component.getLayout ?? ((page) => page);
-
-  console.info('[INFO] baseAPI', axios.defaults.baseURL);
 
   return (
     <>
       <Head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
+      
       <SnackbarProvider
         maxSnack={2}
+        hideIconVariant
         action={(snackbarId) => <AlertCloseButton snackbarId= {snackbarId} />}
+        anchorOrigin={{
+          horizontal: 'right',
+          vertical: 'top'
+        }}
       >
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <SettingsProvider>

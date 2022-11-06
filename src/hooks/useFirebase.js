@@ -1,188 +1,165 @@
-import { 
-    GoogleAuthProvider,
-    getAuth,
-    signInWithPopup,
-    signInWithEmailAndPassword, 
-    signOut, 
-    getAdditionalUserInfo,
-    createUserWithEmailAndPassword,
-    sendPasswordResetEmail,
-    deleteUser,
-    updateProfile
-} from "firebase/auth";
-import { initializeApp } from 'firebase/app';
-import { firebaseErrors } from "../utils/firebaseErrors";
+import { initializeApp} from 'firebase/app'
+import {getAuth, GoogleAuthProvider, signOut, getAdditionalUserInfo, signInWithPopup,deleteUser, signInWithEmailAndPassword,createUserWithEmailAndPassword, sendPasswordResetEmail} from 'firebase/auth'
 import useSettings from './useSettings'
+import { errorMessage } from '../constants'
+import { firebaseErrors } from '../utils/firebaseErrors'
 
+// <- initialization ->
+const firebaseConfig = process.env.firebaseConfig
+export const app = initializeApp(firebaseConfig)
+export const auth = getAuth(app)
 // 
 
-const app = initializeApp(process.env.firebaseConfig);
-const auth = getAuth(app)
-
-// 
-async function googleAuthLogin (setAlert) {
+async function handleSignOut (setAlert) {
     try {
         const currentUser = await auth.currentUser
-        if(currentUser) throw new Error('You are already logged in!')
-        // 
+        if (currentUser) {
+            await signOut(auth)
+            setAlert(`See you later: ${currentUser.displayName}`)
+            return;
+        }
+        else {
+            return setAlert(`But 😲 ! You are not logged in`)
+        }
+    }
+    catch(err) {
+        const {message, code} = err
+        setAlert(firebaseErrors[code] || message, 'error')
+        return errorMessage(err)
+    }
+}
+
+async function handleGoogleLogin (setAlert) {
+    try {
+        
         const provider = new GoogleAuthProvider();
         provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+        // 
         const res = await signInWithPopup(auth, provider)
         const user = res.user; 
-        const { isNewUser } = getAdditionalUserInfo(res)
-        // const credentials = GoogleAuthProvider.credentialFromResult(res)
-        // const token = credentials.accessToken;
-        
+        const isNewUser = getAdditionalUserInfo(res)?.isNewUser
+        const credentials = GoogleAuthProvider.credentialFromResult(res)
+        const token = credentials?.accessToken;
+        // 
         if (isNewUser) {
             await deleteUser(user)
-            throw new Error('Please create an account to continue.')
+            setAlert(`Buddy 😉 ! You are new here.`)
+            return
         }
-        setAlert(`Logged in as ${user.displayName.split(" ")[0].toUpperCase()}`)
+        setAlert(`Welcome 😊 ${user.displayName}`)
         return ({
             success: true,
             message: `users data`,
             data: user
         })
     }
-    
-  catch(error) {
-    const errorCode = error.code
-    setAlert(firebaseErrors[errorCode] || error.message, 'error')
-    return errorMessage(error)
-  }
-}
-// 
-async function googleAuthSignup (setAlert) {
-    try {
-        const currentUser = await auth.currentUser
-        if (currentUser) throw new Error(`Please logout to continue.`)
-        // 
-        const provider = new GoogleAuthProvider();
-        provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
-        const res = await signInWithPopup(auth, provider)
-        const user = res.user; 
-        const { isNewUser } = getAdditionalUserInfo(res)
-        // const credentials = GoogleAuthProvider.credentialFromResult(res)
-        // const token = credentials.accessToken;
-        if (!isNewUser) {
-            await signOut(auth)
-            throw new Error('This account already exist.')
-        }
-        setAlert(`${user.displayName} welcome to pushable!`)
-        return ({
-            success: true,
-            message: `users data`,
-            data: user
-        })
+    catch(err) {
+        const {message, code} = err
+        setAlert(firebaseErrors[code] || message, 'error')
+        return errorMessage(err)
     }
-    
-    catch(error) {
-        const errorCode = error.code
-        setAlert(firebaseErrors[errorCode] || error.message, 'error')
-        return errorMessage(error)
-      }
 }
 
-// <--Login With Email and Password -->
-export async function loginWithEmailAndPassword ({email, password, setAlert}) {
+async function handleGoogleSignup (setAlert) {
+    try {
+        const provider = new GoogleAuthProvider();
+        provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+        // 
+        const res = await signInWithPopup(auth, provider)
+        const user = res.user;
+        const isNewUser = getAdditionalUserInfo(res)?.isNewUser
+        const credentials = GoogleAuthProvider.credentialFromResult(res)
+        const token = credentials?.accessToken;
+        // 
+        if (!isNewUser) {
+            await signOut(auth)
+            setAlert('Buddy 😉 ! You already have an account here.')
+            setAlert('So, Loggin to continue.')
+            return
+        }
+        setAlert(`Welcome 😊 ${user.displayName} to the family.`)
+        return ({
+            success: true,
+            message: `users data`,
+            data: user
+        })
+    }
+    catch(err) {
+        const {message, code} = err
+        setAlert(firebaseErrors[code] || message, 'error')
+        return errorMessage(err)
+    }
+}
+
+
+async function handleLoginWithEmailAndPassword (email, password, setAlert) {
     try {
         const res = await signInWithEmailAndPassword(auth, email, password)
         const user = res.user
 
-        setAlert(`Logged in: ${user.displayName.split(" ")[0].toUpperCase()}`)
+        setAlert(`Welcome back ${user.displayName} 😊`)
         return ({
             success: true,
-            message: `Logged in as ${user.displayName}`,
+            message: `welcome ${user.displayName}`,
             data: user
         })
     }
-    catch(error) {
-        const errorCode = error.code
-        setAlert(firebaseErrors[errorCode] || error.message, 'error')
-        return errorMessage(error)
-      }
+    catch(err) {
+        const {message, code} = err
+        setAlert(firebaseErrors[code] || message, 'error')
+        return errorMessage(err)
+    }
 }
 
-// <--Signup With Email and Password -->
-export async function signupWithEmailAndPassword ({email, password, setAlert, fullName}) {
+
+export async function handleSignupWithEmailAndPassword (email, password, setAlert) {
     try {
         const res = await createUserWithEmailAndPassword(auth, email, password)
-        let user = res.user
-        await updateProfile(user, {displayName: fullName})
+        const user = res.user
 
-        setAlert(`${user.displayName.split(" ").shift()} welcome to pushable!`)
+        setAlert(`Welcome 😊 ${user.displayName} to the family.`)
         return ({
             success: true,
             message: `Logged in as ${user.displayName}`,
             data: user
         })
     }
-    catch(error) {
-        const errorCode = error.code
-        setAlert(firebaseErrors[errorCode] || error.message, 'error')
-        return errorMessage(error)
-      }
-}
-
-// <--Signout -->
-const handleSignOut = async (setAlert) => {
-    try {
-        const user = await auth.currentUser
-        if (user) {
-            await signOut(auth)
-            setAlert(`See you later ${user.displayName}!`)
-            return ({
-                success: true,
-                message: `successfully signed out`,
-                data: null
-            })
-        }
-        
-    }
-    catch(error) {
-        setAlert(error.message, 'error')
-        return errorMessage(error)
+    catch(err) {
+        const {message, code} = err
+        setAlert(firebaseErrors[code] || message, 'error')
+        return errorMessage(err)
     }
 }
 
-// <--Send reset Password Link -->
-async function sendResetPasswordLink ({email, setAlert}) {
+
+async function sendResetPasswordLink (email, setAlert) {
     try {
         await sendPasswordResetEmail(auth, email)
-        setAlert(`Link sent to: ${email}`)
+        setAlert({message: `Password reset link sent to ${email}`})
         return ({
             success: true,
-            message: `Link sent to: ${email}`,
-            data: null
+            email
         })
     }
-    catch(error) {
-        const errorCode = error.code
-        setAlert(firebaseErrors[errorCode] || error.message, 'error')
-        return errorMessage(error)
+    catch(err) {
+        const {message, code} = err
+        setAlert(firebaseErrors[code] || message, 'error')
+        return errorMessage(err)
     }
 }
 
+// export defaults
 export default function useFirebase () {
 
     const {setAlert} = useSettings()
 
-    return {
+    return ({
         auth,
         signOut: () => handleSignOut(setAlert),
-        googleAuthLogin: () => googleAuthLogin(setAlert),
-        googleAuthSignup: () => googleAuthSignup(setAlert),
-        loginWithEmailAndPassword: ({email, password}) => loginWithEmailAndPassword({email, password, setAlert}),
-        signupWithEmailAndPassword: ({email, password, fullName}) => signupWithEmailAndPassword({email, password, setAlert, fullName}),
-        sendResetPasswordLink: ({email}) => sendResetPasswordLink({email, setAlert})
-    }
-}
-
-function errorMessage (error) {
-    const errorCode = error.code
-    return ({
-        success: false,
-        message: firebaseErrors[errorCode] || error.message,
-        data: null
+        googleLogin: () => handleGoogleLogin(setAlert),
+        googleSignup: () => handleGoogleSignup(setAlert),
+        signinWithEmailAndPassword: (email, password) => handleLoginWithEmailAndPassword(email, password, setAlert),
+        sendResetPasswordLink: (email) => sendResetPasswordLink(email, setAlert),
+        signupWithEmailAndPassword: (email, password) => handleSignupWithEmailAndPassword(email, password, setAlert)
     })
 }

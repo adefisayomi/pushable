@@ -1,23 +1,12 @@
-// _data
-import { _pricingHome } from '../_data/mock';
-// layouts
 import Layout from '../src/layouts';
 // components
 import { Page } from '../src/components';
-// sections
-import { PricingHome } from '../src/sections/pricing';
 import {
   HomeHero,
   // HomeFAQs,
   HomeNewStart,
-  // HomeDemoPages,
-  HomeForDesigner,
-  HomeCombination,
-  HomeAdvertisement,
-  HomeFeatureHighlights,
-  HomeFlexibleComponents,
 } from '../src/sections/home';
-import { useFirebase } from '../src/hooks';
+import { useFirebase} from '../src/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -27,13 +16,18 @@ export default function HomePage() {
 
   return (
     <Page title="">
+      <HomeHero />
 
-      <button style= {{padding: '400px'}} onClick={signOut}>Logout</button>
-      {/* <HomeHero />
+      <div>
+        Ill show up here
+
+        <button onClick= {signOut}>Get user</button>
+      </div>
+      
 
       <HomeNewStart />
 
-      <HomeFlexibleComponents />
+     {/*  <HomeFlexibleComponents />
       
 
       <HomeFeatureHighlights />

@@ -66,7 +66,7 @@ export default function RegisterForm() {
           render={({ field, fieldState: { error } }) => (
             <TextField
               {...field}
-              size='small'
+              size='large'
               variant='outlined'
               label="Full Name"
               error={Boolean(error)}
@@ -81,7 +81,7 @@ export default function RegisterForm() {
           render={({ field, fieldState: { error } }) => (
             <TextField
               {...field}
-              size='small'
+              size='large'
               variant='outlined'
               fullWidth
               label="Email address"
@@ -98,7 +98,7 @@ export default function RegisterForm() {
             <TextField
               {...field}
               fullWidth
-              size='small'
+              size='large'
               variant='outlined'
               label="Password"
               type={showPassword ? 'text' : 'password'}
@@ -141,24 +141,13 @@ export default function RegisterForm() {
 
         <LoadingButton
           fullWidth
-          size="medium"
+          size="large"
           type="submit"
           variant="contained"
           loading={isSubmitting}
         >
           Create Account
         </LoadingButton>
-
-        <Typography variant="caption" align="center" sx={{ color: 'text.secondary', mt: 3 }}>
-          I agree to
-          <Link color="text.primary" href="#">
-            {''} Terms of Service {''}
-          </Link>
-          and
-          <Link color="text.primary" href="#">
-            {''} Privacy Policy.
-          </Link>
-        </Typography>
       </Stack>
     </form>
   );

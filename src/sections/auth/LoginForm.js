@@ -63,7 +63,7 @@ export default function LoginForm() {
             <TextField
               {...field}
               fullWidth
-              size='small'
+              size='large'
               variant='outlined'
               label="Email address"
               error={Boolean(error)}
@@ -79,7 +79,7 @@ export default function LoginForm() {
             <TextField
               {...field}
               fullWidth
-              size='small'
+              size='large'
               variant='outlined'
               label="Password"
               type={showPassword ? 'text' : 'password'}
@@ -107,7 +107,7 @@ export default function LoginForm() {
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
               <NextLink href={Routes.signup} passHref>
                 <Link variant="subtitle2" color="primary">
-                  {''} create an account
+                  {''} New user?
                 </Link>
               </NextLink>
             </Typography>
@@ -123,7 +123,8 @@ export default function LoginForm() {
 
         <LoadingButton
           fullWidth
-          size="medium"
+          size="large"
+          bgcolor= 'primary'
           type="submit"
           variant="contained"
           loading={isSubmitting}
