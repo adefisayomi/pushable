@@ -5,7 +5,15 @@ import { errorMessage } from '../constants'
 import { firebaseErrors } from '../utils/firebaseErrors'
 
 // <- initialization ->
-const firebaseConfig = process.env.firebaseConfig
+const firebaseConfig = {
+    apiKey: process.env.apiKey,
+    authDomain: "pushable-posts.firebaseapp.com",
+    projectId: "pushable-posts",
+    storageBucket: "pushable-posts.appspot.com",
+    messagingSenderId: "755177135538",
+    appId: process.env.appId,
+    measurementId: "G-VLFX0H1651"
+  }
 export const app = initializeApp(firebaseConfig)
 export const auth = getAuth(app)
 // 
