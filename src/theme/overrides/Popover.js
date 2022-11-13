@@ -7,8 +7,9 @@ export default function Popover(theme) {
     MuiPopover: {
       styleOverrides: {
         paper: {
-          boxShadow: theme.customShadows.z24,
-          borderRadius: Number(theme.shape.borderRadius) * 1.5,
+          boxShadow: 0,
+          elevation: 0,
+          borderRadius: Number(theme.shape.borderRadius) * 0.5,
           border: `solid 1px ${alpha(theme.palette.grey[500], 0.08)}`,
         },
       },

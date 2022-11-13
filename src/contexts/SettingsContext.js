@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect, useReducer } from 'react';
 // hooks
 import { useLocalStorage } from '../hooks';
 // utils
@@ -9,6 +9,8 @@ import { defaultSettings } from '../config';
 import { useSnackbar } from 'notistack';
 import {useFirebase} from '../hooks'
 import { onAuthStateChanged } from "firebase/auth"
+import dayjs from 'dayjs'
+import { initialEvent, eventReducer } from './calenderReducer';
 
 // ----------------------------------------------------------------------
 
@@ -73,6 +75,20 @@ function SettingsProvider({ children }) {
   useEffect(() => {
     onAuthStateChanged(auth, res => setUser(res ? res : null))
   }, [user, auth])
+  // 
+  const [events, setEvents] = useState([
+    {description: 'this is event 1', title: 'event 1 this is ti make it big', startDate: new Date(), endDate: new Date(), bgColor: 'red'},
+    {description: 'this is event 2', bgColor: 'green', title: 'event 2 this is ti make it big', startDate: dayjs().add(4, 'day').toDate(), endDate: new Date()},
+    {description: 'this is event 3', bgColor: 'blue',  title: 'event 3 this is ti make it big', startDate: dayjs().add(7, 'day').toDate(), endDate: new Date()},
+])
+const [event, dispatchEvent] = useReducer(eventReducer, initialEvent)
+// const [openEventModal, setOpenEventModal] = useState({
+//   open: false,
+//   title: '',
+//   description: '',
+//   startDate: new Date(),
+//   endDate: dayjs().add(1, 'day').toDate()
+// })
 
   return (
     <SettingsContext.Provider
@@ -97,7 +113,9 @@ function SettingsProvider({ children }) {
         onResetSetting,
         // ----
         user,
-        setAlert
+        setAlert,
+        events, setEvents,
+        event, dispatchEvent
       }}
     >
       {children}

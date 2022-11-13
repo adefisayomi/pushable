@@ -12,7 +12,6 @@ import Routes from '../../routes';
 // components
 import { Logo } from '../../components';
 //
-import LanguagePopover from '../LanguagePopover';
 import { ToolbarStyle, ToolbarShadowStyle } from './HeaderToolbarStyle';
 
 // ----------------------------------------------------------------------
@@ -43,11 +42,6 @@ export default function HeaderSimple({ transparent }) {
             divider={<Divider orientation="vertical" sx={{ height: 24 }} />}
             spacing={2.5}
           >
-            <LanguagePopover
-              sx={{
-                ...(isScrolling && { color: 'text.primary' }),
-              }}
-            />
 
             <NextLink href={Routes.support} passHref>
               <Link

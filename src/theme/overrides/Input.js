@@ -6,7 +6,8 @@ export default function Input(theme) {
   return {
     MuiTextField: {
       defaultProps: {
-        variant: 'filled',
+        // variant: 'filled',
+        variant: 'outlined'
       },
     },
     MuiInputBase: {

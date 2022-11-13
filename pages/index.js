@@ -12,7 +12,7 @@ import { useFirebase} from '../src/hooks';
 
 export default function HomePage() {
 
-  const {signOut} = useFirebase()
+  const {signOut, facebookLogin} = useFirebase()
 
   return (
     <Page title="">
@@ -21,7 +21,7 @@ export default function HomePage() {
       <div>
         Ill show up here
 
-        <button onClick= {signOut}>Get user</button>
+        <button onClick= {facebookLogin}>Login with facebook</button>
       </div>
       
 

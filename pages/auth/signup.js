@@ -5,8 +5,10 @@ import { Stack, Divider, Typography, Avatar, Link } from '@mui/material';
 import { Page } from '../../src/components';
 import { Logo } from '../../src/components';
 import { AuthWithSocial, RegisterForm } from '../../src/sections/auth';
-import { useFirebase } from '../../src/hooks';
+import { useFirebase, useSettings } from '../../src/hooks';
 import NextLink from 'next/link'
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 // ----------------------------------------------------------------------
 
@@ -36,7 +38,14 @@ const ContentStyle = styled('div')(({ theme }) => ({
 export default function RegisterCoverPage() {
 
   const {googleSignup} = useFirebase()
+  const {user} = useSettings()
+  const router = useRouter()
 
+  useEffect(() => {
+    if (user) {
+      return router.back()
+    }
+  }, [user, router])
 
   return (
     <Page title="Signup ">

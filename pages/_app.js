@@ -18,9 +18,8 @@ import 'react-lazy-load-image-component/src/effects/black-and-white.css';
 import PropTypes from 'prop-types';
 // next
 import Head from 'next/head';
-// @mui
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 // contexts
 import { SettingsProvider } from '../src/contexts/SettingsContext';
 // theme
@@ -32,6 +31,7 @@ import ThemeColorPresets from '../src/components/ThemeColorPresets';
 import MotionLazyContainer from '../src/components/animate/MotionLazyContainer';
 import {SnackbarProvider} from 'notistack'
 import {AlertCloseButton} from '../src/components'
+import { SWRConfig } from 'swr'
 
 // ----------------------------------------------------------------------
 
@@ -57,11 +57,20 @@ export default function MyApp(props) {
         hideIconVariant
         action={(snackbarId) => <AlertCloseButton snackbarId= {snackbarId} />}
         anchorOrigin={{
-          horizontal: 'right',
+          horizontal: 'left',
           vertical: 'top'
         }}
       >
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <SWRConfig 
+            value={{
+              refreshInterval: 3000,
+              revalidateOnFocus: true,
+              revalidateOnReconnect: true,
+              revalidateOnMount:true,
+              fetcher: (resource, init) => fetch(resource, init).then(res => res.json())
+            }}
+          >
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
           <SettingsProvider>
             <ThemeProvider>
               <ThemeColorPresets>
@@ -75,6 +84,7 @@ export default function MyApp(props) {
             </ThemeProvider>
           </SettingsProvider>
         </LocalizationProvider>
+        </SWRConfig>
       </SnackbarProvider>
     </>
   );

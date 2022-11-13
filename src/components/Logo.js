@@ -4,8 +4,7 @@ import { memo } from 'react';
 import NextLink from 'next/link';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Box } from '@mui/material';
-import Image from 'next/image'
+import { Box, Typography } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -16,31 +15,37 @@ Logo.propTypes = {
 };
 
 function Logo({ onDark = false, isSimple = false, sx }) {
-
   const theme = useTheme();
   const isLight = theme.palette.mode === 'light';
+
+  const PRIMARY_MAIN = theme.palette.primary.main;
+  const LIGHT_COLOR = theme.palette.common.white;
+  const DARK_COLOR = theme.palette.grey[800];
 
   return (
     <NextLink href="/" passHref>
       <Box
         sx={{
-          width: 100,
+          width: 'fit-content',
           cursor: 'pointer',
           ...sx,
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center'
+          justifyContent: 'flex-start'
         }}
       >
-
-        <Image
-          src= '/logo3.png'
-          alt= 'Logo'
-          width= {400}
-          height= {120}
-          objectFit= 'cover'
-        />
-        
+        <Typography 
+          sx= {{  
+            fontFamily: 'Fredoka One', 
+            color: isLight ? DARK_COLOR : LIGHT_COLOR, 
+            textTransform: 'capitalize',
+            letterSpacing: '1px',
+            fontSize: '25px',
+            fontWeight: 'bolder'
+          }}
+        >
+          Pushable
+        </Typography>
       </Box>
     </NextLink>
   );

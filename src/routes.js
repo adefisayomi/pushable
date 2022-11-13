@@ -70,6 +70,11 @@ const Routes = {
   buyNow: 'https://material-ui.com/store/items/zone-landing-page',
   figmaPreview:
     'https://www.figma.com/file/iAnp6x4J6YNvbVzdBnGM8P/%5BPreview%5D-Zone-Web?node-id=0%3A1',
+  dashboard: {
+    calender: '/dashboard/calender',
+    mail: '/dashboard/mail',
+    chat: '/dashboard/chat',
+  }
 };
 
 export default Routes;

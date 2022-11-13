@@ -3,12 +3,13 @@ import {useResponsive} from '../hooks'
 import {Box, Grid} from '@mui/material'
 import {useTheme} from '@mui/material/styles'
 import Aside from '../sections/Aside'
+import {Logo} from '../components'
 // next
 import dynamic from 'next/dynamic';
 import { Scrollbar } from '../components';
 //
 const Header = dynamic(() => import('./header/Header'), { ssr: false });
-const FooterSimple = dynamic(() => import('./footer/FooterSimple'), { ssr: false });
+const HeaderSimple = dynamic(() => import('./header/HeaderSimple'), { ssr: false });
 
 // ----------------------------------------------------------------------
 
@@ -27,6 +28,7 @@ export default function Layout({
   transparentHeader,
   disabledHeader,
   disabledFooter,
+  simpleHeader= false,
   hideSideBar= false
 }) {
 
@@ -47,10 +49,16 @@ export default function Layout({
               top: 0,
               left: 0,
               height: '100vh',
+              maxHeight: '100vh',
               overflowX: 'hidden',
-              overflowY: 'auto',
+              overflowY: 'hidden',
+              borderRight: `solid 1px ${theme.palette.divider}`
             }}
           >
+            <Box py={3}>
+              <Logo />
+            </Box>
+
             <Scrollbar
               sx={{
                 py: { xs: 3, md: 0 },
@@ -67,11 +75,11 @@ export default function Layout({
           xs={ !hideSideBar && isDesktop ? 9.5 : 12}
         >
           <>
-            {disabledHeader ? null : <Header transparent={transparentHeader} />}
+            {disabledHeader ? null : simpleHeader ? <HeaderSimple /> : <Header transparent={transparentHeader} />}
 
             {children}
 
-            {disabledFooter ? null : <FooterSimple />}
+            {/* {disabledFooter ? null : <FooterSimple />} */}
           </>
         </Grid>
       </Grid>

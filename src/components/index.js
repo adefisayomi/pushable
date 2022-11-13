@@ -29,3 +29,4 @@ export { default as AppStoreButton } from './AppStoreButton';
 export { default as FavoriteButton } from './FavoriteButton';
 export { default as SearchNotFound } from './SearchNotFound';
 export { default as AlertCloseButton } from './AlertCloseButton'
+export { default as Badge } from './Badge'

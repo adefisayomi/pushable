@@ -5,7 +5,9 @@ import { Page} from '../../src/components';
 // sections
 import { AuthWithSocial, LoginForm } from '../../src/sections/auth';
 import NextLink from 'next/link';
-import { useFirebase } from '../../src/hooks';
+import { useFirebase, useSettings } from '../../src/hooks';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 // ----------------------------------------------------------------------
 
@@ -35,6 +37,14 @@ const ContentStyle = styled('div')(({ theme }) => ({
 export default function Login() {
 
   const {googleLogin} = useFirebase()
+  const {user} = useSettings()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (user) {
+      return router.back()
+    }
+  }, [user, router])
 
   return (
     <Page title="Login">

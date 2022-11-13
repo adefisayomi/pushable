@@ -1,11 +1,9 @@
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-// icons
-import contentDeliveryNetwork from '@iconify/icons-carbon/content-delivery-network';
 // @mui
-import { MenuItem, Box, Popover } from '@mui/material';
-// components
-import { Iconify } from '../components';
+import { MenuItem, Box, Popover, Badge } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import { IconButtonAnimate } from '../components/animate';
 
 // ----------------------------------------------------------------------
@@ -30,11 +28,21 @@ const LANGS = [
 
 // ----------------------------------------------------------------------
 
-LanguagePopover.propTypes = {
+Notification.propTypes = {
   sx: PropTypes.object,
 };
 
-export default function LanguagePopover({ sx }) {
+const StyledBadge = styled(Badge)(({ theme }) => ({
+  '& .MuiBadge-badge': {
+    right: -1,
+    top: 5,
+    border: `2px solid ${theme.palette.background.paper}`,
+    padding: '0 4px',
+    backgroundColor: '#0288d1'
+  },
+}));
+
+export default function Notification({ sx }) {
   const [currentLang, setCurrentLang] = useState('en');
 
   const [open, setOpen] = useState(null);
@@ -54,9 +62,14 @@ export default function LanguagePopover({ sx }) {
 
   return (
     <>
-      <IconButtonAnimate color="inherit" onClick={handleOpen} sx={sx}>
-        <Iconify icon={contentDeliveryNetwork} sx={{ width: 20, height: 20 }} />
-      </IconButtonAnimate>
+      
+        <IconButtonAnimate color="inherit" onClick={handleOpen} sx={sx} size= 'small'>
+          <StyledBadge color="primary" badgeContent={2} showZero>
+            <NotificationsActiveIcon />
+          </StyledBadge >
+        </IconButtonAnimate>
+      
+      
 
       <Popover
         open={Boolean(open)}
@@ -65,7 +78,7 @@ export default function LanguagePopover({ sx }) {
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         PaperProps={{
-          sx: { px: 1, width: 220 },
+          sx: { px: 1, width: '100%', maxWidth: '300px' },
         }}
       >
         {LANGS.map((option) => (

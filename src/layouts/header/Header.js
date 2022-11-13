@@ -6,15 +6,17 @@ import NextLink from 'next/link';
 import { useTheme } from '@mui/material/styles';
 import { Box, Stack, Button, Divider, Container } from '@mui/material';
 // hooks
-import { useOffSetTop, useResponsive } from '../../hooks';
+import { useOffSetTop, useResponsive, useSettings } from '../../hooks';
 // routes
 import Routes from '../../routes';
 // config
 import { HEADER_DESKTOP_HEIGHT } from '../../config';
 import Searchbar from '../Searchbar';
-import LanguagePopover from '../LanguagePopover';
+// import LanguagePopover fro../AddSocialMediaAccountver';
+import UserAccount from '../UserAccount'
 import { NavMobile, NavDesktop, navConfig } from '../nav';
 import { ToolbarStyle } from './HeaderToolbarStyle';
+import Notification from '../Notification'
 
 // ----------------------------------------------------------------------
 
@@ -28,6 +30,7 @@ export default function Header({ transparent, ...others }) {
   const isDesktop = useResponsive('up', 'md');
 
   const isLight = theme.palette.mode === 'light';
+  const {user} = useSettings()
 
   const isScrolling = useOffSetTop(HEADER_DESKTOP_HEIGHT);
 
@@ -59,24 +62,23 @@ export default function Header({ transparent, ...others }) {
               }}
             />
 
-            <LanguagePopover
-              sx={{
-                ...(isScrolling && { color: 'text.primary' }),
-              }}
-            />
+            <Notification />
 
             <Divider orientation="vertical" sx={{ height: 24 }} />
 
-            {isDesktop && (
+            { isDesktop && (
               <Stack direction="row" spacing={1}>
-                <NextLink href={Routes.login} prefetch={false} passHref>
-                  <Button
-                    color="inherit"
-                    variant="contained"
-                  >
-                    Login
-                  </Button>
+                {user ? 
+                  <UserAccount /> :
+                  <NextLink href={Routes.login} prefetch={false} passHref>
+                    <Button
+                      color="inherit"
+                      variant="contained"
+                    >
+                      Login
+                    </Button>
                 </NextLink>
+                }
               </Stack>
             )}
           </Stack>

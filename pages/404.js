@@ -65,7 +65,7 @@ export default function PageNotFound() {
 
 PageNotFound.getLayout = function getLayout(page) {
   return (
-    <Layout simpleHeader disabledFooter>
+    <Layout simpleHeader hideSideBar>
       {page}
     </Layout>
   );

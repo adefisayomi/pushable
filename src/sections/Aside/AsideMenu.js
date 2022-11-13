@@ -5,7 +5,8 @@ import chatIcon from '@iconify/icons-carbon/chat';
 import mobileIcon from '@iconify/icons-carbon/mobile';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Box, Tab, Tabs, Stack, Drawer, Typography, CardActionArea, Paper } from '@mui/material';
+import { Box, Tab, Tabs, Stack, Drawer, Typography, CardActionArea } from '@mui/material';
+import {useTheme} from '@mui/material/styles'
 // hooks
 import useResponsive from '../../hooks/useResponsive';
 // utils
@@ -39,15 +40,16 @@ AsideMenu.propTypes = {
 };
 
 export default function AsideMenu ({
-  topic,
+  menu,
   sidebarConfig,
-  onChangeTopic,
+  onChangeMenu,
   isOpenSidebar,
   onCloseSidebar,
 }) {
 
     const router = useRouter()
   const isDesktop = useResponsive('up', 'md');
+  const theme = useTheme()
 
   const renderContent = (
     <Scrollbar
@@ -56,37 +58,39 @@ export default function AsideMenu ({
       }}
     >
       <Tabs
-        value={topic}
-        onChange={onChangeTopic}
+        value={menu}
+        onChange={onChangeMenu}
         orientation="vertical"
         sx={{
           pl: { xs: 2.5, md: 0 },
         }}
       >
-        {sidebarConfig.map((topic) => (
+        {sidebarConfig.map((menu, index) => (
           <Tab
-            key={topic.title}
-            value={topic.title}
-            label={topic.title}
-            onClick= {() => router.push(topic.url)}
-            icon={
-              <Image
-                alt={topic.icon}
-                src={topic.icon}
-                sx={{ width: 28, height: 28, mr: `20px !important` }}
-              />
-            }
+            key= {index}
+            value={menu.title}
+            label={menu.title}
+            onClick= {() => router.push(menu.url)}
+            icon={menu.icon}
             sx={{
-              height: 56,
+              height: 35,
               typography: 'body2',
+              fontSize: '14px',
+              width: '100%',
+              px: 1,
+              borderRadius: 1,
               justifyContent: 'flex-start',
-              '&.Mui-selected': { typography: 'subtitle2' },
+              '&.Mui-selected': { 
+                typography: 'subtitle2', 
+                bgcolor: theme.palette.mode === 'light' && theme.palette.grey[200],
+                border: theme.palette.mode === 'dark' && `1px solid ${theme.palette.divider}`,
+              },
             }}
           />
         ))}
       </Tabs>
 
-      <Box
+      {/* <Box
         sx={{
           mt: { xs: 2.5, md: 5 },
           pl: { xs: 2.5, md: 0 },
@@ -121,7 +125,7 @@ export default function AsideMenu ({
             </Typography>
           </ContactButtonStyle>
         </Stack>
-      </Box>
+      </Box> */}
     </Scrollbar>
   );
 
@@ -136,13 +140,11 @@ export default function AsideMenu ({
             //   width: DRAWER_WIDTH,
               position: 'unset',
               bgcolor: 'background.default',
-              minHeight: '100vh'
+              minHeight: '100vh',
+              border: 'none'
             },
           }}
         >
-          <Box py= {2}>
-            <Logo />
-          </Box>
 
           {renderContent}
 
