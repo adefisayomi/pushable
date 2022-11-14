@@ -5,7 +5,7 @@ import chatIcon from '@iconify/icons-carbon/chat';
 import mobileIcon from '@iconify/icons-carbon/mobile';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Box, Tab, Tabs, Stack, Drawer, Typography, CardActionArea, Avatar, Divider, List, ListItemAvatar, ListItem, ListItemText } from '@mui/material';
+import { Box, Tab, Tabs, Stack, Drawer, Typography, CardActionArea, Avatar, Divider, List, ListItemAvatar, ListItem, ListItemButton } from '@mui/material';
 import {useTheme} from '@mui/material/styles'
 // hooks
 import useResponsive from '../../hooks/useResponsive';
@@ -56,78 +56,46 @@ export default function AsideMenu ({
   const theme = useTheme()
 
   const renderContent = (
-    <List sx={{ width: '100%' }}>
-        <Stack spacing= {1}>
+    <List sx={{ width: '100%'}}>
       {
         Array(20).fill(null).map((user, index) => (
-            <ListItem alignItems="flex-start" key= {index} sx= {{px: 1, bgcolor: theme.palette.grey[200]}}>
+            <ListItemButton 
+                role={undefined} 
+                dense 
+                key= {index} 
+                sx= {{
+                    display: 'flex',
+                    alignItems: 'center',
+                    py: 0
+                }}
+            >
                 <ListItemAvatar>
-                <Avatar />
+                <Avatar sx={{width: 45, height: 45}} />
                 </ListItemAvatar>
 
-                <Stack alignItems='flex-start' justifyContent='space-between'>
+                <Stack 
+                    spacing= {1} 
+                    alignItems='flex-start' 
+                    justifyContent='space-between'
+                    width= '100%' 
+                    sx= {{borderBottom: `1px solid ${theme.palette.divider}`}}
+                >
                     <Stack direction= 'row' alignItems='center' justifyContent='space-between' width= '100%'>
-                        <Typography variant= 'body2' sx= {{textTransform: 'capitalize'}} >
+                        <Typography variant= 'overline' sx= {{textTransform: 'capitalize'}} >
                             dolapo oluwole
                         </Typography>
                         <Typography variant= 'body2' sx= {{fontSize: '10px'}}>
-                            12:30 jun 2020
+                            yesterday
                         </Typography>
                     </Stack>
-                    <TextMaxLine variant= 'body2' line= {1}>
-                        — Wish I could come, but I'm out of town this…
+                    <TextMaxLine variant= 'body2' line= {1} sx= {{fontSize: '12px'}}>
+                        could come home
                     </TextMaxLine>
                 </Stack>
 
-            
-            </ListItem>
+            </ListItemButton>
             ))
         }
-      </Stack>
-      {/* <Divider variant="inset" component="li" /> */}
-      {/* <ListItem alignItems="flex-start">
-        <ListItemAvatar>
-          <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-        </ListItemAvatar>
-        <ListItemText
-          primary="Summer BBQ"
-          secondary={
-            <React.Fragment>
-              <Typography
-                sx={{ display: 'inline' }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                to Scott, Alex, Jennifer
-              </Typography>
-              {" — Wish I could come, but I'm out of town this…"}
-            </React.Fragment>
-          }
-        />
-      </ListItem>
-      <Divider variant="inset" component="li" />
-      <ListItem alignItems="flex-start">
-        <ListItemAvatar>
-          <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
-        </ListItemAvatar>
-        <ListItemText
-          primary="Oui Oui"
-          secondary={
-            <React.Fragment>
-              <Typography
-                sx={{ display: 'inline' }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                Sandra Adams
-              </Typography>
-              {' — Do you have Paris recommendations? Have you ever…'}
-            </React.Fragment>
-          }
-        />
-      </ListItem> */}
     </List>
   );
 

@@ -33,7 +33,7 @@ export default function Chat () {
         
         <Grid 
           item
-          md= {3}
+          md= {3.5}
           sx= {{
             position: 'sticky',
             top: 0,
@@ -65,7 +65,7 @@ export default function Chat () {
         
         <Grid 
           item
-          md= {9}
+          md= {8.5}
         >
           main
         </Grid>
